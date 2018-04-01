@@ -8,25 +8,20 @@ pic_formats = ['JPG', 'PNG', ]
 
 
 def picture_exif(src, file_name):
-    print('begin')
+    # print('begin')
     file_path = src + '\\' + file_name
-    # print(file_name[-3:])
-    if file_name[-3:] in pic_formats:
-        # print(i)
-        img = Image.open(file_path)
-        # 获取图片exif信息
-        exifdata = []
-        if hasattr(img, '_getexif'):
-            exifdata = img._getexif()
-            # 获取日期
-        ret = {}
-        for tag, value in exifdata.items():
-            decode = TAGS.get(tag, tag)
-            ret[decode] = value
-            # print('ret:{}'.format(ret))
-        return ret
-    else:
-        return None
+    img = Image.open(file_path)
+    # 获取图片exif信息
+    exifdata = []
+    if hasattr(img, '_getexif'):
+        exifdata = img._getexif()
+        # 获取日期
+    ret = {}
+    for tag, value in exifdata.items():
+        decode = TAGS.get(tag, tag)
+        ret[decode] = value
+        # print('ret:{}'.format(ret))
+    return ret
 
 
 def copy_picture(src, dst, file_name):
@@ -55,11 +50,14 @@ def sort_by_date(src, dst):
     pic_counter = 0
     # 打开图片
     files = os.listdir(src)
+    # print('begin:{}'.format(len(files)))
     for file in files:
-        # print('file:{}'.format(file))
-        copy_picture(src, dst, file)
+        print(file)
         pic_counter += 1
-        print('dealed_pictures dealed/pictures: {}/{}'.format(pic_counter, len(files)))
+        if file[-3:] in pic_formats:
+            # print('file:{}'.format(file))
+            copy_picture(src, dst, file)
+            print('dealed_pictures dealed/pictures: {}/{}'.format(pic_counter, len(files)))
 
 
 if __name__ == '__main__':
